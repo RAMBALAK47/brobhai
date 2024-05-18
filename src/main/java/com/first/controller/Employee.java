@@ -12,4 +12,9 @@ public class Employee {
     public String getEmployeeAddress(){
         return "Rambalak Kumar, Bihar";
     }
+
+    @GetMapping("/mobile")
+    public String getMobileNumber(){
+        return "+91 7200902921";
+    }
 }
