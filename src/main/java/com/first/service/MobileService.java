@@ -10,6 +10,10 @@ public interface MobileService  {
 
      Mobile findByID(int emei);
      List<Mobile> findAll();
+
+     Mobile save(Mobile mobile);
+
+     void delete(int emei);
      //Mobile save(Mobile mobile);
     //void deleteById();
 }

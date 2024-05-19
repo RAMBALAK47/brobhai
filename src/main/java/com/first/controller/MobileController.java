@@ -1,12 +1,13 @@
 package com.first.controller;
 
 import com.first.entity.Mobile;
+import com.first.repository.MobileRepository;
 import com.first.service.MobileService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,13 +18,32 @@ public class MobileController {
     @Autowired
     public MobileService mobileService;
 
+    @Autowired
+    private MobileRepository repository;
+
     @GetMapping("/{emei}")
-    public Mobile getMobileDetailsById(@PathVariable int emei){
-        return mobileService.findByID(emei);
+    public ResponseEntity<Mobile> getMobileDetailsById(@PathVariable int emei){
+        return ResponseEntity.status(HttpStatus.OK).body(mobileService.findByID(emei));
     }
 
     @GetMapping("/all")
-    public List<Mobile> getAllMobileDetails(){
-        return mobileService.findAll();
+    public  ResponseEntity<List<Mobile>> getAllMobileDetails(){
+        return ResponseEntity.status(HttpStatus.OK).body(mobileService.findAll());
+    }
+   @PostMapping("/save")
+    public ResponseEntity<Mobile> saveMobile(@RequestBody Mobile mobile){
+       return ResponseEntity.status(HttpStatus.CREATED).body(mobileService.save(mobile));
+    }
+
+//    @DeleteMapping("/delete/{emei}")
+//    public void getMobilesDetailsById(@PathVariable int emei) {
+//        mobileService.delete(emei);
+//    }
+
+    @DeleteMapping("/delete/{emei}")
+    public Mobile delete(@PathVariable int emei) {
+        Mobile mobile = repository.findById(emei).orElseThrow(() -> new EntityNotFoundException("Mobile with EMEI " + emei + " not found"));
+        repository.deleteById(emei);
+        return mobile;
     }
 }

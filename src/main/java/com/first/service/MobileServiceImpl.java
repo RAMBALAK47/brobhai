@@ -21,4 +21,14 @@ public class MobileServiceImpl implements MobileService {
     public List<Mobile> findAll() {
         return repository.findAll();
     }
+
+    @Override
+    public Mobile save(Mobile mobile) {
+        return repository.save(mobile);
+}
+
+    @Override
+    public void delete(int emei) {
+         repository.deleteById(emei);
+    }
 }
